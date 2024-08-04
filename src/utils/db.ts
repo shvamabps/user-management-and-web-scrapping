@@ -3,13 +3,21 @@ import sql, {
   ConnectionPool,
   Request as IRequest,
   IResult,
+  ISqlType,
+  ISqlTypeFactoryWithLength,
   config as SqlConfig,
+  Transaction,
 } from "mssql";
 config();
 
 interface QueryParam {
-  type: any; // You can replace 'any' with specific types from 'mssql' if known
-  value: any;
+  type: ISqlTypeFactoryWithLength | ISqlType;
+  value: string | number | boolean | Date | Buffer | null;
+}
+
+interface QueryResult {
+  rowCount: number;
+  rows: Record<string, string | number | boolean | Date | Buffer | null>[];
 }
 
 class Database {
@@ -43,22 +51,23 @@ class Database {
   public async query(
     queryString: string,
     params?: QueryParam[]
-  ): Promise<{
-    rowCount: number;
-    rows: Record<string, string | number | boolean>[];
-  }> {
+  ): Promise<QueryResult> {
+    const transaction: Transaction = new sql.Transaction(this.pool);
     try {
-      const request: IRequest = this.pool.request();
+      await transaction.begin();
+      const request: IRequest = transaction.request();
 
       if (params) {
         params.forEach((param, index) => {
-          return request.input(`param${index + 1}`, param.type, param.value);
+          request.input(`param${index + 1}`, param.type, param.value);
         });
       }
 
       const result: IResult<any> = await request.query(queryString);
+      await transaction.commit();
       return { rowCount: result.rowsAffected[0], rows: result.recordset };
     } catch (err) {
+      await transaction.rollback();
       console.error("Query failed: ", err);
       throw err;
     }

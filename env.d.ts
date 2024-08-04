@@ -8,9 +8,10 @@ declare global {
       DB_USER: string;
       DB_PASSWORD: string;
       DB_PORT: string;
-      JWT_SECRET: string;
-      JWT_EXPIRES_IN: string;
-      JWT_REFRESH_SECRET: string;
+      ACCESS_TOKEN_JWT_SECRET: string;
+      REFRESH_TOKEN_JWT_SECRET: string;
+      OTP_VALIDATION_EMAIL: string;
+      OTP_VALIDATION_EMAIL_PASSWORD: string;
     }
   }
 }

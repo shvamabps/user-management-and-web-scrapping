@@ -1,7 +1,7 @@
 services:
   # add the mssql server service to the docker-compose.yml file
   db:
-    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
     environment:
       SA_PASSWORD: "Your_password123"
       ACCEPT_EULA: "Y"
