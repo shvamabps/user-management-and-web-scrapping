@@ -12,22 +12,18 @@ export const UserRegistrationController = async (
 ) => {
   try {
     const user = await registerUsers(req.body);
-    return res.status(user.status).json(user);
+    res.status(user.status).json(user);
   } catch (error: unknown) {
-    return res
-      .status(500)
-      .json({ message: error, status: 500, success: false });
+    res.status(500).json({ message: error, status: 500, success: false });
   }
 };
 
 export const UserLoginController = async (req: Request, res: Response) => {
   try {
     const user = await loginUsers(req.body);
-    return res.status(user.status).json(user);
+    res.status(user.status).json(user);
   } catch (error: unknown) {
-    return res
-      .status(500)
-      .json({ message: error, status: 500, success: false });
+    res.status(500).json({ message: error, status: 500, success: false });
   }
 };
 
@@ -37,11 +33,9 @@ export const ValidateEmailOTPController = async (
 ) => {
   try {
     const user = await validateEmailOTP(req.body);
-    return res.status(user.status).json(user);
+    res.status(user.status).json(user);
   } catch (error: unknown) {
-    return res
-      .status(500)
-      .json({ message: error, status: 500, success: false });
+    res.status(500).json({ message: error, status: 500, success: false });
   }
 };
 
@@ -51,10 +45,8 @@ export const GenerateNewAccessTokenController = async (
 ) => {
   try {
     const user = await generateNewAccessToken(req.body);
-    return res.status(user.status).json(user);
+    res.status(user.status).json(user);
   } catch (error: unknown) {
-    return res
-      .status(500)
-      .json({ message: error, status: 500, success: false });
+    res.status(500).json({ message: error, status: 500, success: false });
   }
 };

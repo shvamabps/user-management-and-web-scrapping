@@ -22,13 +22,23 @@ config();
 
 const PORT = process.env.PORT as string;
 
-app.get("/", async (_req: Request, res: Response) => {
-  return res.status(200).json({
+app.get("/", (_: Request, res: Response): void => {
+  res.status(200).json({
     message: "Server is running",
+    status: 200,
+    success: false,
   });
 });
 
 app.use("/api/users", UserRouter);
+
+app.use("*", (_: Request, res: Response): void => {
+  res.status(404).json({
+    message: "Not Found",
+    status: 404,
+    success: false,
+  });
+});
 
 if (cluster.isPrimary) {
   console.info(`Primary ${process.pid} is running`);
@@ -42,8 +52,6 @@ if (cluster.isPrimary) {
     console.info(`worker ${worker.process.pid} died`);
   });
 } else {
-  // Workers can share any TCP connection
-  // In this case it is an HTTP server
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });

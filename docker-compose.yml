@@ -1,17 +1,26 @@
 services:
-  # add the mssql server service to the docker-compose.yml file
   db:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     environment:
-      SA_PASSWORD: "Your_password123"
+      MSSQL_SA_PASSWORD: "Your_password123"
       ACCEPT_EULA: "Y"
-      DB_NAME: "user_management_and_webscrapping"
     ports:
       - "1433:1433"
     volumes:
       - db-data:/var/opt/mssql
     expose:
       - "1433"
+    container_name: db
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Your_password123 -d tempdb -Q 'SELECT 1' || exit 1",
+        ]
+      interval: 10s
+      retries: 10
+      start_period: 20s
+      timeout: 3s
 
 volumes:
   db-data:

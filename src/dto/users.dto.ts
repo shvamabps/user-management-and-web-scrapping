@@ -44,12 +44,14 @@ const ValidateUserEmailDTO = z.object({
 });
 
 const GenerateNewAccessTokenDTO = z.object({
-  body: z.object({
-    refreshToken: z.string({ required_error: "Refresh token is required." }),
-    email: z
-      .string({ required_error: "Email is required." })
-      .email({ message: "Invalid email." }),
-  }),
+  body: z
+    .object({
+      refreshToken: z.string({ required_error: "Refresh token is required." }),
+      email: z
+        .string({ required_error: "Email is required." })
+        .email({ message: "Invalid email." }),
+    })
+    .strict(),
 });
 
 export {

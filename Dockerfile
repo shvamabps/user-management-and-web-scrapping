@@ -2,11 +2,11 @@ FROM node:lts-slim
 
 WORKDIR /app
 
-COPY package.json /app
+COPY package.json .
 
 RUN npm install --legacy-peer-deps
 
-COPY . /app
+COPY . .
 
 CMD ["npm", "start"]
 

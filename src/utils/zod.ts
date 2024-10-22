@@ -26,9 +26,9 @@ export const validateDTO =
         query: req.query,
         params: req.params,
       });
-      return next();
+      next();
     } catch (error) {
-      return res.status(400).json({
+      res.status(400).json({
         message: formatZodError(error),
         status: 400,
         success: false,

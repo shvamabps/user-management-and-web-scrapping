@@ -27,7 +27,7 @@ export const verifyToken = async (
 
     if (!accessToken) {
       res.status(401).json({
-        message: "Access token not found",
+        message: "Header is required.",
         status: 401,
         success: false,
       });
@@ -58,7 +58,7 @@ export const verifyToken = async (
       return;
     }
 
-    if (!getUser.rows[0].IsEmailValidated) {
+    if (!getUser.rows[0].isEmailValidated) {
       res.status(401).json({
         message: "Email not validated",
         status: 401,

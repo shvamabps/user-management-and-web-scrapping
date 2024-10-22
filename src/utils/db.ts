@@ -1,5 +1,6 @@
 import { config } from "dotenv";
 import sql, {
+  ConnectionError,
   ConnectionPool,
   Request as IRequest,
   IResult,
@@ -44,7 +45,8 @@ class Database {
       await this.pool.connect();
       console.log("Connected");
     } catch (err) {
-      console.error("Connection failed: ", err);
+      console.info("Connection failed: ", err);
+      throw err as ConnectionError;
     }
   }
 
@@ -63,12 +65,14 @@ class Database {
         });
       }
 
-      const result: IResult<any> = await request.query(queryString);
+      const result: IResult<
+        Record<string, string | number | boolean | Date | Buffer | null>[]
+      > = await request.query(queryString);
       await transaction.commit();
       return { rowCount: result.rowsAffected[0], rows: result.recordset };
     } catch (err) {
       await transaction.rollback();
-      console.error("Query failed: ", err);
+      console.info("Query failed: ", err);
       throw err;
     }
   }
